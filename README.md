@@ -26,8 +26,8 @@ score points, walls, player, eats, menu
 
 We have in game functions:
 New Game
-Save Game
-Load Game
+Save Game ?
+Load Game ?
 End Game
 Move player in room
 Add points to score point
