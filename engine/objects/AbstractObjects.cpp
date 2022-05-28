@@ -4,20 +4,17 @@ class AbstractObjects
     public:
         virtual void print() = 0;
 
-    protected:
-        unsigned short x;
-        unsigned short y;
-        bool solid;
-        string view;
-        unsigned short type;
-
         void setCoordinatsX(unsigned short x, unsigned short y) {
             this->x = x;
             this->y = y;
         }
 
-        unsigned short getCoordinats() {
-            return this->x, this->y;
+        unsigned short getCoordinatX() {
+            return this->x;
+        }
+
+        unsigned short getCoordinatY() {
+            return this->y;
         }
 
         void setView(string view) {
@@ -40,4 +37,11 @@ class AbstractObjects
         {
             return this->type;
         }
+
+    protected:
+        unsigned short x;
+        unsigned short y;
+        bool solid;
+        string view;
+        unsigned short type;
 };

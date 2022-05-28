@@ -12,9 +12,12 @@ class Render
             vector<vector<AbstractObjects*>> map = this->scene.getMap();
             unsigned short x = this->scene.getSizeX();
             unsigned short y = this->scene.getSizeY();
-            for(int i = 0; i < map.size(); ++i) {
-                for(int j = 0; j < map[i].size(); ++j)
-                    map[i][j]->print();
+            for(int i = 0; i < x; ++i) {
+                for(int j = 0; j < y; ++j)
+                    if (map[i][j])
+                        map[i][j]->print();
+                    else
+                        cout << "  ";
                 cout << endl;
             }
         }
