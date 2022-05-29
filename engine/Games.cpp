@@ -1,12 +1,17 @@
 class Games
 {
     private:
-        bool startGame = true;
-
+        bool startGame = false;
+        int difficulty = 1;
     public:
+        Games(int difficulty)
+        {
+            this->difficulty = difficulty;
+        }
+
         void play()
         {
-            if (this->startGame) {
+            if (!this->startGame) {
                 this->newGame();
                 this->startGame = true;
                 return;
