@@ -1,4 +1,5 @@
 using namespace std;
+
 class AbstractObjects
 {   
     public:

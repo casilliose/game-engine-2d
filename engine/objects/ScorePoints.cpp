@@ -1,20 +1,36 @@
 class ScorePoints
 {
-    public:
+    private:
         unsigned short scorePoints = 0;
+        string view = "";
 
-    unsigned short getPoints()
-    {
-        return this->scorePoints;
-    }
+    public:
+        ScorePoints() = default;
+        unsigned short getPoints()
+        {
+            return this->scorePoints;
+        }
 
-    void addPoints(unsigned short point)
-    {
-        this->scorePoints += point;
-    }
+        void addPoints(unsigned short point)
+        {
+            this->scorePoints += point;
+        }
 
-    void print()
-    {
-        cout << this->scorePoints;
-    }
+        void rmPoints(unsigned short point)
+        {
+            if (this->scorePoints - point <= 0) {
+                this->scorePoints = 0;
+            }
+            this->scorePoints -= point;
+        }
+
+        void print()
+        {
+            cout << this->view << " = " << this->scorePoints;
+        }
+
+        void setView(string view)
+        {
+            this->view = view;
+        }
 };
