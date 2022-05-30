@@ -6,7 +6,7 @@ class Eats : public AbstractObjects
     public:
 
     Eats(unsigned short x, unsigned short y, bool solid, string view) {
-        this->setCoordinatsX(x, y);
+        this->setCoordinats(x, y);
         this->setSolid(solid);
         this->setView(view);
         this->type = 3;

@@ -4,8 +4,9 @@ class AbstractObjects
 {   
     public:
         virtual void print() = 0;
+        virtual unsigned short getScorePoints() = 0;
 
-        void setCoordinatsX(unsigned short x, unsigned short y) {
+        void setCoordinats(unsigned short x, unsigned short y) {
             this->x = x;
             this->y = y;
         }
@@ -38,6 +39,7 @@ class AbstractObjects
         {
             return this->type;
         }
+        
 
     protected:
         unsigned short x;

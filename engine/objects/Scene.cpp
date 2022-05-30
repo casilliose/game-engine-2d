@@ -32,4 +32,14 @@ class Scene
         {
             this->map[x][y] = item;
         }
+
+        void removeItemMap(unsigned short x, unsigned short y)
+        {
+            this->map[x][y] = nullptr;
+        }
+
+        auto getByCoordinat(unsigned short x, unsigned short y)
+        {
+            return this->map[x][y];
+        }
 };

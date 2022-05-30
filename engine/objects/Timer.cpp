@@ -1,7 +1,7 @@
 class Timer
 {
     private:
-        unsigned short time = 60;
+        int time = 60;
         string view = "";
 
     public:
