@@ -4,11 +4,12 @@ class Games
         bool isStartGame = false;
         int difficulty = 0;
         Scene scene;
-        Player player;
+        Player* player;
         Timer timer;
         ScorePoints scorePoint;
+        time_t startTime;
         time_t currentTime;
-        int previewTime = 0;
+        int factor;
 
     public:
         void play()
@@ -62,33 +63,80 @@ class Games
         void nextStep()
         {
             char c;
-            read (STDIN_FILENO, &c, 1);
-            int newCoordinatY = this->player.getCoordinatY();
-            int newCoordinatX = this->player.getCoordinatX();
-            switch (c)
-            {
-                case 'w':
-                    newCoordinatY++;
-                break;
-                case 's':
-                    newCoordinatY--;
-                break;
-                case 'd':
-                    newCoordinatX--;
-                break;
-                case 'a':
-                    newCoordinatX++;
-                break;
-            }
-            int delTime = time(0) - this->currentTime - this->previewTime;
+            this->currentTime = time(0);
+            int delTime = (this->currentTime - this->startTime);
             this->timer.setTime(this->timer.getTimeGame() - delTime);
             if (this->timer.getTimeGame() <= 0) {
                 cout << CLEAR;
-                cout << "Game is Over \n You score point : " << BOLDYELLOW << this->scorePoint.getPoints();
+                cout << "Game is Over \n You score point : " << BOLDYELLOW << this->scorePoint.getPoints() << endl;
                 this->isStartGame = false;
+                cout << "Try to now, please press key Enter for exit cntr+z" << endl;
+                read (STDIN_FILENO, &c, 1);
                 return;
             }
-            this->previewTime = delTime;
+
+            read (STDIN_FILENO, &c, 1);
+            int newCoordinatY = this->player->getCoordinatY();
+            int newCoordinatX = this->player->getCoordinatX();
+            int previewY = this->player->getCoordinatY();
+            int previewX = this->player->getCoordinatX();
+            switch (c)
+            {
+                case 'd':
+                    if ((newCoordinatY + 1) < this->scene.getSizeY() - 1) {
+                        newCoordinatY++;
+                    } else {
+                        return;
+                    }
+                break;
+                case 'a':
+                    if ((newCoordinatY - 1) > 0) {
+                        newCoordinatY--;
+                    } else {
+                        return;
+                    }
+                break;
+                case 's':
+                    if ((newCoordinatX + 1) < this->scene.getSizeX() - 1) {
+                        newCoordinatX++;
+                    } else {
+                        return;
+                    }
+                break;
+                case 'w':
+                    if ((newCoordinatX - 1) > 0) {
+                        newCoordinatX--;
+                    } else {
+                        return;
+                    }
+                break;
+            }
+            auto item = this->scene.getByCoordinat(newCoordinatX, newCoordinatY);
+            if ((bool)item) {
+                if (item->getTypeObject() == 3) {
+                    this->scorePoint.addPoints(item->getScorePoints());
+                    for(int i = 1; i < 3; i++) {
+                        this->scene.setItemMap(
+                            this->getRandomCoordinatsX(this->scene.getSizeX()), 
+                            this->getRandomCoordinatsY(this->scene.getSizeY()), 
+                            this->getRandomEats(10)
+                        );
+                    }
+                } else if (this->scorePoint.getPoints() > 0 && item->getTypeObject() == 5) {
+                    this->scorePoint.rmPoints(10);
+                    if (this->scorePoint.getPoints() > 10) {
+                        AbstractObjects* amanita = new Inedible(1, 1, false, "🍄");
+                        scene.setItemMap(
+                            this->getRandomCoordinatsX(this->scene.getSizeX() - 1),
+                            this->getRandomCoordinatsY(this->scene.getSizeY() - 1), 
+                            amanita
+                        );
+                    }
+                }
+            }
+            this->scene.removeItemMap(previewX, previewY);
+            this->player->setCoordinats(newCoordinatX, newCoordinatY);
+            this->scene.setItemMap(newCoordinatX, newCoordinatY, this->player);
             cout << CLEAR;
             this->timer.print();
             cout << "     ";
@@ -96,6 +144,7 @@ class Games
             cout << endl << endl;
             Render render(this->scene);
             render.Write();
+            this->startTime = time(0);
         }
 
         void newGame()
@@ -106,7 +155,7 @@ class Games
             int countEats = 10;
             int countInedible = 2;
             int timeCnock = 120;
-            int factor = 3;
+            this->factor = 3;
             switch (this->difficulty) {
                 case 2:
                     sceneX = 35;
@@ -114,7 +163,7 @@ class Games
                     countEats = 7;
                     countInedible = 2;
                     timeCnock = 60;
-                    factor = 2;
+                    this->factor = 2;
                 break;
                 case 3:
                     sceneX = 50;
@@ -122,34 +171,28 @@ class Games
                     countEats = 5;
                     countInedible = 10;
                     timeCnock = 30;
-                    factor = 1;
+                    this->factor = 1;
                 break;
             }
             
             Scene scene(sceneX, sceneY);
-            Walls wallWhite(1, 1, true, "⬜");
-            AbstractObjects* wh;
-            wh = &wallWhite;
-            Walls wallBlack(1, 1, true, "⬛");
-            AbstractObjects* wb;
-            wb = &wallBlack;
+            Walls* wallWhite = new Walls(1, 1, true, "⬜");
+            Walls* wallBlack = new Walls(1, 1, true, "⬛");
             int xMax = scene.getSizeX() - 1;
             int yMax = scene.getSizeY() - 1;
             for (int y = 0; y < yMax; y++)
             {
-                scene.setItemMap(0, y, wb);
-                scene.setItemMap(xMax, y, wb);
+                scene.setItemMap(0, y, wallBlack);
+                scene.setItemMap(xMax, y, wallBlack);
             }
             for (int x = 0; x <= xMax; x++)
             {
-                scene.setItemMap(x, 0, wh);
-                scene.setItemMap(x, yMax, wh);
+                scene.setItemMap(x, 0, wallWhite);
+                scene.setItemMap(x, yMax, wallWhite);
             }
 
-            Player player(xMax / 2, yMax / 2, true, "🐆");
-            AbstractObjects* p;
-            p = &player;
-            scene.setItemMap(player.getCoordinatX(), player.getCoordinatY(), p);
+            Player* player = new Player(xMax / 2, yMax / 2, true, "🐆");
+            scene.setItemMap(player->getCoordinatX(), player->getCoordinatY(), player);
             this->player = player;
 
             for (int i = 0; i <= countEats; i++) {
@@ -159,49 +202,49 @@ class Games
                     case 1:
                     {
                         Eats* cherry = new Eats(1, 1, false, "🍒");
-                        cherry->setScorePoints(factor * 1);
+                        cherry->setScorePoints(this->factor * 1);
                         scene.setItemMap(this->getRandomCoordinatsX(xMax), this->getRandomCoordinatsY(yMax), cherry);
                     }
                     break;
                     case 2:
                     {
                         Eats* eatTomato = new Eats(1, 1, false, "🍅");
-                        eatTomato->setScorePoints(factor * 2);
+                        eatTomato->setScorePoints(this->factor * 2);
                         scene.setItemMap(this->getRandomCoordinatsX(xMax), this->getRandomCoordinatsY(yMax), eatTomato);
                     }
                     break;
                     case 3:
                     {
                         Eats* eatStrawberry = new Eats(1, 1, false, "🍓");
-                        eatStrawberry->setScorePoints(factor * 3);
+                        eatStrawberry->setScorePoints(this->factor * 3);
                         scene.setItemMap(this->getRandomCoordinatsX(xMax), this->getRandomCoordinatsY(yMax), eatStrawberry);
                     }
                     break;
                     case 4:
                     {
                         Eats* eatPear = new Eats(1, 1, false, "🍐");
-                        eatPear->setScorePoints(factor * 4);
+                        eatPear->setScorePoints(this->factor * 4);
                         scene.setItemMap(this->getRandomCoordinatsX(xMax), this->getRandomCoordinatsY(yMax), eatPear);
                     }
                     break;
                     case 5:
                     {
                         Eats* eatPineapple = new Eats(1, 1, false, "🍍");
-                        eatPineapple->setScorePoints(factor * 5);
+                        eatPineapple->setScorePoints(this->factor * 5);
                         scene.setItemMap(this->getRandomCoordinatsX(xMax), this->getRandomCoordinatsY(yMax), eatPineapple);
                     }
                     break;
                     case 6:
                     {
                         Eats* eatMeat = new Eats(1, 1, false, "🥩");
-                        eatMeat->setScorePoints(factor * 1);
+                        eatMeat->setScorePoints(this->factor * 1);
                         scene.setItemMap(this->getRandomCoordinatsX(xMax), this->getRandomCoordinatsY(yMax), eatMeat);
                     }   
                     break;
                     default:
                     {
                         Eats* eatCherry = new Eats(1, 1, false, "🍒");
-                        eatCherry->setScorePoints(factor * 1);
+                        eatCherry->setScorePoints(this->factor * 1);
                         scene.setItemMap(this->getRandomCoordinatsX(xMax), this->getRandomCoordinatsY(yMax), eatCherry);
                     }
                     break;
@@ -233,7 +276,64 @@ class Games
             Render render(this->scene);
             render.Write();
             sleep(1);
-            this->currentTime = time(0);
+            this->startTime = time(0);
+        }
+
+        Eats* getRandomEats(int countEats)
+        {
+            int rendEat = this->getRandomEatType(countEats);
+            switch (rendEat)
+            {
+                case 1:
+                {
+                    Eats* eat = new Eats(1, 1, false, "🍒");
+                    eat->setScorePoints(this->factor * 1);
+                    return eat;
+                }
+                break;
+                case 2:
+                {
+                    Eats* eat = new Eats(1, 1, false, "🍅");
+                    eat->setScorePoints(this->factor * 2);
+                    return eat;
+                }
+                break;
+                case 3:
+                {
+                    Eats* eat = new Eats(1, 1, false, "🍓");
+                    eat->setScorePoints(this->factor * 3);
+                    return eat;
+                }
+                break;
+                case 4:
+                {
+                    Eats* eat = new Eats(1, 1, false, "🍐");
+                    eat->setScorePoints(this->factor * 4);
+                    return eat;
+                }
+                break;
+                case 5:
+                {
+                    Eats* eat = new Eats(1, 1, false, "🍍");
+                    eat->setScorePoints(this->factor * 5);
+                    return eat;
+                }
+                break;
+                case 6:
+                {
+                    Eats* eat = new Eats(1, 1, false, "🥩");
+                    eat->setScorePoints(this->factor * 1);
+                    return eat;
+                }   
+                break;
+                default:
+                {
+                    Eats* eat = new Eats(1, 1, false, "🍒");
+                    eat->setScorePoints(this->factor * 1);
+                    return eat;
+                }
+                break;
+            }
         }
 
         int getRandomEatType(int countEats)
