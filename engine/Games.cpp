@@ -66,15 +66,17 @@ class Games
             this->currentTime = time(0);
             int delTime = (this->currentTime - this->startTime);
             this->timer.setTime(this->timer.getTimeGame() - delTime);
+            this->startTime = time(0);
             if (this->timer.getTimeGame() <= 0) {
                 cout << CLEAR;
                 cout << "Game is Over \n You score point : " << BOLDYELLOW << this->scorePoint.getPoints() << endl;
                 this->isStartGame = false;
-                cout << "Try to now, please press key Enter for exit cntr+z" << endl;
+                cout << "Press Enter for back to Menu or exit cntr+z" << endl;
+                read (STDIN_FILENO, &c, 1);
+                read (STDIN_FILENO, &c, 1);
                 read (STDIN_FILENO, &c, 1);
                 return;
             }
-
             read (STDIN_FILENO, &c, 1);
             int newCoordinatY = this->player->getCoordinatY();
             int newCoordinatX = this->player->getCoordinatX();
@@ -115,7 +117,7 @@ class Games
             if ((bool)item) {
                 if (item->getTypeObject() == 3) {
                     this->scorePoint.addPoints(item->getScorePoints());
-                    for(int i = 1; i < 3; i++) {
+                    for(int i = 1; i < 2; i++) {
                         this->scene.setItemMap(
                             this->getRandomCoordinatsX(this->scene.getSizeX()), 
                             this->getRandomCoordinatsY(this->scene.getSizeY()), 
@@ -144,7 +146,6 @@ class Games
             cout << endl << endl;
             Render render(this->scene);
             render.Write();
-            this->startTime = time(0);
         }
 
         void newGame()
