@@ -66,6 +66,7 @@ class Games
             this->currentTime = time(0);
             int delTime = (this->currentTime - this->startTime);
             this->timer.setTime(this->timer.getTimeGame() - delTime);
+            this->startTime = time(0);
             if (this->timer.getTimeGame() <= 0) {
                 cout << CLEAR;
                 cout << "Game is Over \n You score point : " << BOLDYELLOW << this->scorePoint.getPoints() << endl;
@@ -74,7 +75,6 @@ class Games
                 read (STDIN_FILENO, &c, 1);
                 return;
             }
-
             read (STDIN_FILENO, &c, 1);
             int newCoordinatY = this->player->getCoordinatY();
             int newCoordinatX = this->player->getCoordinatX();
@@ -144,7 +144,6 @@ class Games
             cout << endl << endl;
             Render render(this->scene);
             render.Write();
-            this->startTime = time(0);
         }
 
         void newGame()
