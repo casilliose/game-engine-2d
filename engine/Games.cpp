@@ -71,7 +71,9 @@ class Games
                 cout << CLEAR;
                 cout << "Game is Over \n You score point : " << BOLDYELLOW << this->scorePoint.getPoints() << endl;
                 this->isStartGame = false;
-                cout << "Try to now, please press key Enter for exit cntr+z" << endl;
+                cout << "Press Enter for back to Menu or exit cntr+z" << endl;
+                read (STDIN_FILENO, &c, 1);
+                read (STDIN_FILENO, &c, 1);
                 read (STDIN_FILENO, &c, 1);
                 return;
             }
@@ -115,7 +117,7 @@ class Games
             if ((bool)item) {
                 if (item->getTypeObject() == 3) {
                     this->scorePoint.addPoints(item->getScorePoints());
-                    for(int i = 1; i < 3; i++) {
+                    for(int i = 1; i < 2; i++) {
                         this->scene.setItemMap(
                             this->getRandomCoordinatsX(this->scene.getSizeX()), 
                             this->getRandomCoordinatsY(this->scene.getSizeY()), 
