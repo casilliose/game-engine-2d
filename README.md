@@ -4,7 +4,7 @@ Name Game "LionFeeding"
 
 Engine Developer by Igor Branitsky
 
-![image](https://github.com/casilliose/game-engine-2d/master/lionfeed.gif)
+![image](https://github.com/casilliose/game-engine-2d/blob/main/lionfeed.gif)
 
 Procces game
 You are playing as a lion, you can moving with keypress
