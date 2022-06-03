@@ -1,12 +1,12 @@
 class Scene
 {
     protected:
-        unsigned short x;
-        unsigned short y;
+        uint16_t x;
+        uint16_t y;
         vector<vector<AbstractObjects*>> map;
 
     public:
-        Scene (unsigned short x, unsigned short y) {
+        Scene (uint16_t x, uint16_t y) {
             this->x = x;
             this->y = y;
             vector<vector<AbstractObjects*>> map{x,vector<AbstractObjects*>{y,nullptr}};
@@ -15,31 +15,31 @@ class Scene
 
         Scene() = default;
 
-        unsigned short getSizeX() {
-            return this->x;
+        uint16_t getSizeX() {
+            return x;
         }
         
-        unsigned short getSizeY() {
-            return this->y;
+        uint16_t getSizeY() {
+            return y;
         }
 
         vector<vector<AbstractObjects*>> getMap()
         {
-            return this->map;
+            return map;
         }
 
-        void setItemMap(unsigned short x, unsigned short y, AbstractObjects* item)
+        void setItemMap(uint16_t x, uint16_t y, AbstractObjects* item)
         {
-            this->map[x][y] = item;
+            map[x][y] = item;
         }
 
-        void removeItemMap(unsigned short x, unsigned short y)
+        void removeItemMap(uint16_t x, uint16_t y)
         {
-            this->map[x][y] = nullptr;
+            map[x][y] = nullptr;
         }
 
-        auto getByCoordinat(unsigned short x, unsigned short y)
+        auto getByCoordinat(uint16_t x, uint16_t y)
         {
-            return this->map[x][y];
+            return map[x][y];
         }
 };

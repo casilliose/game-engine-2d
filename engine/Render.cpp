@@ -10,10 +10,10 @@ class Render
 
         void Write() {
             vector<vector<AbstractObjects*>> map = this->scene.getMap();
-            unsigned short x = this->scene.getSizeX();
-            unsigned short y = this->scene.getSizeY();
-            for(int i = 0; i < x; ++i) {
-                for(int j = 0; j < y; ++j)
+            uint16_t x = this->scene.getSizeX();
+            uint16_t y = this->scene.getSizeY();
+            for(size_t i = 0; i < x; ++i) {
+                for(size_t j = 0; j < y; ++j)
                     if (map[i][j])
                         map[i][j]->print();
                     else

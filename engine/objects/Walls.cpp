@@ -1,21 +1,21 @@
 class Walls : public AbstractObjects
 {
     public:
-    
-    Walls(unsigned short x, unsigned short y, bool solid, string view) {
-        this->setCoordinats(x, y);
-        this->setSolid(solid);
-        this->setView(view);
-        this->type = 1;
-    }
+        Walls(uint16_t x, uint16_t y, bool solid, string view) {
+            const uint8_t typeWalls {1}; 
+            this->setCoordinats(x, y);
+            this->setSolid(solid);
+            this->setView(view);
+            type = typeWalls;
+        }
 
-    void print()
-    {
-        cout << this->view;
-    }
+        void print()
+        {
+            cout << view;
+        }
 
-    unsigned short getScorePoints()
-    {
-        return 0;
-    }
+        uint16_t getScorePoints()
+        {
+            return 0;
+        }
 };

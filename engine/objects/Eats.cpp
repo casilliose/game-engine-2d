@@ -1,29 +1,27 @@
 class Eats : public AbstractObjects
 {
     private:
-        unsigned short scorePoints = 0;
+        uint16_t scorePoints = 0;
 
     public:
 
-    Eats(unsigned short x, unsigned short y, bool solid, string view) {
+    Eats(uint16_t x, uint16_t y, bool solid, string view) {
+        const uint8_t typeEat {3}; 
         this->setCoordinats(x, y);
         this->setSolid(solid);
         this->setView(view);
-        this->type = 3;
+        type = typeEat;
     }
 
-    unsigned short getScorePoints()
-    {
-        return this->scorePoints;
+    uint16_t getScorePoints() {
+        return scorePoints;
     }
 
-    void setScorePoints(unsigned short point)
-    {
-        this->scorePoints = point;
+    void setScorePoints(uint16_t point) {
+        scorePoints = point;
     }
 
-    void print()
-    {
-        cout << this->view;
+    void print() {
+        cout << view;
     }
 };
