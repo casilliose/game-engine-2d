@@ -8,9 +8,11 @@ class Games
         Player* player2;
         Timer timer;
         ScorePoints scorePoint;
+        ScorePoints scorePointRival;
         time_t startTime;
         time_t currentTime;
         uint8_t factor;
+        bool isPC;
 
     public:
         void play()
@@ -45,11 +47,14 @@ class Games
                         }
                         menu.showRules();
                         read (STDIN_FILENO, &c, 1);
+                        isPC = true;
                         this->newGame();
                         this->isStartGame = true;
                     break;
                     case '2':
-
+                        isPC = false;
+                        this->newGame();
+                        this->isStartGame = true;
                     break;
                     case '3':
                         exit(0);
@@ -74,10 +79,18 @@ class Games
             const uint8_t readByte {1};
             if (timer.getTimeGame() <= 0) {
                 cout << CLEAR;
-                cout << "Game is Over \n You score point : " << BOLDYELLOW << scorePoint.getPoints() << endl;
+                if (scorePoint.getPoints() > scorePointRival.getPoints()) {
+                    cout << "You Win !!!" << endl;
+                } else if (scorePoint.getPoints() == scorePointRival.getPoints()) {
+                    cout << "Draw" << endl;
+                } else {
+                    cout << "You is lost (((" << endl;
+                }
+                cout << "You score point : " << BOLDYELLOW << scorePoint.getPoints() << endl;
+                cout << "Player 2 score point : " << BOLDBLUE << scorePointRival.getPoints() << endl;
                 isStartGame = false;
                 cout << "Press Enter for back to Menu or exit cntr+z" << endl;
-                sleep(5);
+                sleep(10);
                 read (STDIN_FILENO, &c, readByte);
                 return;
             }
@@ -117,8 +130,13 @@ class Games
                     }
                 break;
             }
+             
             auto item = scene.getByCoordinat(newCoordinatX, newCoordinatY);
+            bool canNextStep = true;
             if ((bool)item) {
+                if (item->getTypeObject() == 2) {
+                    canNextStep = false;
+                }
                 if (item->getTypeObject() == 3) {
                     scorePoint.addPoints(item->getScorePoints());
                     for(size_t i = 1; i < 2; i++) {
@@ -140,13 +158,77 @@ class Games
                     }
                 }
             }
-            scene.removeItemMap(previewX, previewY);
-            player->setCoordinats(newCoordinatX, newCoordinatY);
-            scene.setItemMap(newCoordinatX, newCoordinatY, player);
+
+            if (canNextStep) {
+                scene.removeItemMap(previewX, previewY);
+                player->setCoordinats(newCoordinatX, newCoordinatY);
+                scene.setItemMap(newCoordinatX, newCoordinatY, player);
+            }
+            
+
+            // player 2
+            uint16_t p2newCoordinatY = player2->getCoordinatY();
+            uint16_t p2newCoordinatX = player2->getCoordinatX();
+            uint16_t p2previewY = player2->getCoordinatY();
+            uint16_t p2previewX = player2->getCoordinatX();
+           
+            switch (c)
+            {
+                case 'l':
+                    if ((p2newCoordinatY + 1) < scene.getSizeY() - 1) {
+                        p2newCoordinatY++;
+                    } else {
+                        return;
+                    }
+                break;
+                case 'j':
+                    if ((p2newCoordinatY - 1) > 0) {
+                        p2newCoordinatY--;
+                    } else {
+                        return;
+                    }
+                break;
+                case 'k':
+                    if ((p2newCoordinatX + 1) < scene.getSizeX() - 1) {
+                        p2newCoordinatX++;
+                    } else {
+                        return;
+                    }
+                break;
+                case 'i':
+                    if ((p2newCoordinatX - 1) > 0) {
+                        p2newCoordinatX--;
+                    } else {
+                        return;
+                    }
+                break;
+            }
+         
+            auto item2 = scene.getByCoordinat(p2newCoordinatX, p2newCoordinatY);
+            bool canNextStep2 = true;
+            if ((bool)item2) {
+                if (item2->getTypeObject() == 2) {
+                    canNextStep2 = false;
+                }
+                if (item2->getTypeObject() == 3) {
+                    scorePointRival.addPoints(item2->getScorePoints());
+                } else if (scorePointRival.getPoints() > 0 && item2->getTypeObject() == 5) {
+                    scorePointRival.rmPoints(10);
+                }
+            }
+            if (canNextStep2) {
+                scene.removeItemMap(p2previewX, p2previewY);
+                player2->setCoordinats(p2newCoordinatX, p2newCoordinatY);
+                scene.setItemMap(p2newCoordinatX, p2newCoordinatY, player2);
+            }
+
+            // render
             cout << CLEAR;
             timer.print();
-            cout << "     ";
+            cout << "     P1 ";
             scorePoint.print();
+            cout << "     P2 ";
+            scorePointRival.print();
             cout << endl << endl;
             Render render(scene);
             render.Write();
@@ -195,14 +277,6 @@ class Games
                 scene.setItemMap(x, 0, wallWhite);
                 scene.setItemMap(x, yMax, wallWhite);
             }
-
-            Player* player = new Player(xMax / 2, yMax / 2, true, "🐆");
-            scene.setItemMap(player->getCoordinatX(), player->getCoordinatY(), player);
-            this->player = player;
-
-            Player* player2 = new Player(xMax / 2, yMax / 2 + 1, true, "🦕");
-            scene.setItemMap(player2->getCoordinatX(), player2->getCoordinatY(), player2);
-            this->player2 = player2;
 
             for (size_t i = 0; i <= countEats; i++) {
                 uint16_t rendEat = getRandomEatType(countEats);
@@ -264,6 +338,14 @@ class Games
                 AbstractObjects* amanita = new Inedible(1, 1, false, "🍄");
                 scene.setItemMap(getRandomCoordinatsX(xMax), getRandomCoordinatsY(yMax), amanita);
             }
+
+            Player* player = new Player(xMax / 2, yMax / 2, true, "🐆");
+            scene.setItemMap(player->getCoordinatX(), player->getCoordinatY(), player);
+            this->player = player;
+
+            Player* player2 = new Player(xMax / 2, yMax / 2 + 1, true, "🦕");
+            scene.setItemMap(player2->getCoordinatX(), player2->getCoordinatY(), player2);
+            this->player2 = player2;
             
             this->scene = scene;
 
@@ -272,16 +354,17 @@ class Games
             timer.setView("⏳");
             this->timer = timer;
             timer.print();
-
-            cout << "     ";
-
+            cout << "     P1 ";
             ScorePoints scorePoints;
             scorePoint.setView("🏁");
             this->scorePoint = scorePoint;
             scorePoint.print();
-            
+            cout << "     P2 ";
+            ScorePoints scorePointRival;
+            scorePointRival.setView("🏁");
+            this->scorePointRival = scorePointRival;
+            scorePointRival.print();
             cout << endl << endl;
-
             Render render(this->scene);
             render.Write();
             sleep(1);
