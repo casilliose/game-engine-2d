@@ -8,8 +8,8 @@ class Menu
             cout << CLEAR;
             cout << MAGENTA << "Welcom to " << CYAN << "LionFeeding" << RESET << endl;
             cout << "For selected input number on menu and press to enter" << endl;
-            cout << "1. " << CYAN << "Start Game" << RESET << endl;
-            cout << "2. " << CYAN << "Start 1 to 1 Game" << RESET << endl;
+            cout << "1. " << CYAN << "Start Game vs PC" << RESET << endl;
+            cout << "2. " << CYAN << "Start Game 1 vs 1" << RESET << endl;
             cout << "3. " << GREEN << "Exit" << RESET << endl;
         }
 
