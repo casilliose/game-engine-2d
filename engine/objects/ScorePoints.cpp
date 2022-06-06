@@ -1,32 +1,33 @@
 class ScorePoints
 {
     private:
-        unsigned short scorePoints = 0;
-        string view = "";
+        uint16_t scorePoints {0};
+        string view {""};
 
     public:
         ScorePoints() = default;
-        unsigned short getPoints()
+
+        uint16_t getPoints()
         {
-            return this->scorePoints;
+            return scorePoints;
         }
 
-        void addPoints(unsigned short point)
+        void addPoints(uint16_t point)
         {
-            this->scorePoints += point;
+            scorePoints += point;
         }
 
-        void rmPoints(unsigned short point)
+        void rmPoints(uint16_t point)
         {
-            if (this->scorePoints - point <= 0) {
-                this->scorePoints = 0;
+            if (scorePoints - point <= 0) {
+                scorePoints = 0;
             }
-            this->scorePoints -= point;
+            scorePoints -= point;
         }
 
         void print()
         {
-            cout << this->view << " = " << this->scorePoints;
+            cout << view << " = " << scorePoints;
         }
 
         void setView(string view)

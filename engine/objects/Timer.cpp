@@ -1,22 +1,23 @@
 class Timer
 {
     private:
-        int time = 60;
-        string view = "";
+        int time {60};
+        string view {""};
 
     public:
         Timer() = default;
+
         void print()
         {
-            cout << this->view << " = " << this->time;
+            cout << view << " = " << time;
         }
 
         int getTimeGame()
         {
-            return this->time;
+            return time;
         }
 
-        void setTime(int time)
+        void setTime(uint16_t time)
         {
             this->time = time;
         }

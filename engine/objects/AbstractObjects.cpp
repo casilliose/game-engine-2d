@@ -4,19 +4,19 @@ class AbstractObjects
 {   
     public:
         virtual void print() = 0;
-        virtual unsigned short getScorePoints() = 0;
+        virtual uint16_t getScorePoints() = 0;
 
-        void setCoordinats(unsigned short x, unsigned short y) {
+        void setCoordinats(uint16_t x, uint16_t y) {
             this->x = x;
             this->y = y;
         }
 
-        unsigned short getCoordinatX() {
-            return this->x;
+        uint16_t getCoordinatX() {
+            return x;
         }
 
-        unsigned short getCoordinatY() {
-            return this->y;
+        uint16_t getCoordinatY() {
+            return y;
         }
 
         void setView(string view) {
@@ -24,7 +24,7 @@ class AbstractObjects
         }
 
         string getView() {
-            return this->view;
+            return view;
         }
 
         void setSolid(bool solid) {
@@ -32,19 +32,17 @@ class AbstractObjects
         }
 
         bool getSolid() {
-            return this->solid;
+            return solid;
         }
 
-        unsigned short getTypeObject()
-        {
-            return this->type;
+        uint16_t getTypeObject() {
+            return type;
         }
         
-
     protected:
-        unsigned short x;
-        unsigned short y;
+        uint16_t x;
+        uint16_t y;
         bool solid;
         string view;
-        unsigned short type;
+        uint16_t type;
 };
