@@ -149,6 +149,9 @@ class Games
                 if (item->getTypeObject() == 3) {
                     currentCountEats--;
                     scorePoint.addPoints(item->getScorePoints());
+                    if (isPC) {
+                        scene.removeEatForBot(newCoordinatX, newCoordinatY);
+                    }
                 } else if (scorePoint.getPoints() > 0 && item->getTypeObject() == 5) {
                     currentCountInedible--;
                     scorePoint.rmPoints(10);
@@ -167,7 +170,7 @@ class Games
                 uint16_t p2newCoordinatX = player2->getCoordinatX();
                 uint16_t p2previewY = player2->getCoordinatY();
                 uint16_t p2previewX = player2->getCoordinatX();
-                
+                std::tie(p2newCoordinatX, p2newCoordinatY) = scene.getNewCoordinatesForBot(p2previewX, p2previewY);
                 auto item2 = scene.getByCoordinat(p2newCoordinatX, p2newCoordinatY);
                 bool canNextStep2 = true;
                 if ((bool)item2) {
@@ -176,7 +179,8 @@ class Games
                     }
                     if (item2->getTypeObject() == 3) {
                         currentCountEats--;
-                        scorePointRival.addPoints(item2->getScorePoints());
+                        scorePointRival.addPoints(item2->getScorePoints() * difficulty);
+                        scene.removeEatForBot(p2newCoordinatX, p2newCoordinatY);
                     } else if (scorePointRival.getPoints() > 0 && item2->getTypeObject() == 5) {
                         currentCountInedible--;
                         scorePointRival.rmPoints(10);
