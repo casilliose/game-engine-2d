@@ -7,6 +7,9 @@
 #include <ctime>
 #include <fcntl.h>
 #include <algorithm>
+#include <map>
+#include <cmath>
+#include <tuple>
 
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
