@@ -1,7 +1,7 @@
 class ScorePoints
 {
     private:
-        uint16_t scorePoints {0};
+        int16_t scorePoints {0};
         string view {""};
 
     public:
@@ -21,6 +21,7 @@ class ScorePoints
         {
             if (scorePoints - point <= 0) {
                 scorePoints = 0;
+                return;
             }
             scorePoints -= point;
         }

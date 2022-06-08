@@ -32,6 +32,7 @@
 
 #include "engine/objects/AbstractObjects.cpp"
 #include "engine/objects/Eats.cpp"
+#include "engine/objects/Bomb.cpp"
 #include "engine/objects/Player.cpp"
 #include "engine/objects/Scene.cpp"
 #include "engine/objects/ScorePoints.cpp"

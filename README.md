@@ -85,3 +85,5 @@ timer
 score
 🏁
 🍄
+bomb
+💣

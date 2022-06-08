@@ -17,6 +17,7 @@ class Games
         uint16_t countInedible {2};
         uint16_t currentCountEats {0};
         uint16_t currentCountInedible {0};
+        uint16_t countBomd {0};
 
     public:
         void play()
@@ -146,6 +147,10 @@ class Games
                 if (item->getTypeObject() == 2) {
                     canNextStep = false;
                 }
+                if (item->getTypeObject() == 7) {
+                    countBomd--;
+                    scorePointRival.rmPoints(item->getScorePoints());
+                }
                 if (item->getTypeObject() == 3) {
                     currentCountEats--;
                     scorePoint.addPoints(item->getScorePoints());
@@ -176,6 +181,10 @@ class Games
                 if ((bool)item2) {
                     if (item2->getTypeObject() == 2) {
                         canNextStep2 = false;
+                    }
+                    if (item2->getTypeObject() == 7) {
+                        countBomd--;
+                        scorePoint.rmPoints(item2->getScorePoints());
                     }
                     if (item2->getTypeObject() == 3) {
                         currentCountEats--;
@@ -233,6 +242,10 @@ class Games
                     if (item2->getTypeObject() == 2) {
                         canNextStep2 = false;
                     }
+                    if (item2->getTypeObject() == 7) {
+                        countBomd--;
+                        scorePoint.rmPoints(item2->getScorePoints());
+                    }
                     if (item2->getTypeObject() == 3) {
                         currentCountEats--;
                         scorePointRival.addPoints(item2->getScorePoints());
@@ -283,6 +296,20 @@ class Games
                     );
                 }
                 currentCountInedible = countInedible;
+            }
+            if (
+                (!isPC && timer.getTimeGame() % 10 == 1) ||
+                (isPC && difficulty > 1 && timer.getTimeGame() % 10 == 1)
+            ) {
+                if (countBomd <= 0) {
+                    AbstractObjects* bomb = new Bomb(1, 1, false, "💣");
+                    scene.setItemMap(
+                        getRandomCoordinatsX(scene.getSizeX() - 1),
+                        getRandomCoordinatsY(scene.getSizeY() - 1), 
+                        bomb
+                    );
+                    countBomd = 1;
+                }
             }
         }
 
