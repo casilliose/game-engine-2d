@@ -26,7 +26,7 @@ class Menu
         void showRules()
         {
             cout << CLEAR;
-            cout << "You can moving with the help keypress w,a,d,s or arrow button and then keypress Enter button" << endl;
+            cout << "You can moving with the help keypress w,a,d,s and for 2 player with help i,j,k,l" << endl;
             cout << "You target collect as much as possible eats until the time is up" << endl;
             cout << "If you undestend rules, then keypress enter and start games" << endl;
         }
