@@ -10,6 +10,8 @@
 #include <map>
 #include <cmath>
 #include <tuple>
+#include <thread>
+#include <chrono>
 
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */

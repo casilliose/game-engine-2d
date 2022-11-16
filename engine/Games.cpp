@@ -77,6 +77,7 @@ class Games
         void nextStep()
         {
             char c;
+            // c = stepPlaye;
             const uint8_t readByte {1};
 
             currentTime = time(0);
@@ -101,9 +102,12 @@ class Games
                 read (STDIN_FILENO, &c, readByte);
                 return;
             }
-
-            read (STDIN_FILENO, &c, readByte);
-
+            
+            thread th([&]() {
+                read (STDIN_FILENO, &c, readByte);
+            });
+            th.detach();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             uint16_t newCoordinatY = player->getCoordinatY();
             uint16_t newCoordinatX = player->getCoordinatX();
             uint16_t previewY = player->getCoordinatY();
@@ -262,6 +266,7 @@ class Games
             }
             eatsAddToScene();
             // render
+            c = ' ';
             cout << CLEAR;
             timer.print();
             cout << "     P1 ";
